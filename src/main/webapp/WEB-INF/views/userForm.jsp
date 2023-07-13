@@ -28,7 +28,7 @@
     <section>
         <div class="row " style=" margin-right: 0px; margin-left: 0px;">
 
-            <form action="user" class="col-3 m-4  " method="post">
+            <form id="userForm" class="col-3 m-4  ">
                 <div class="mb-3 ">
 
                     <label class="form-label">User Id</label>
@@ -52,7 +52,7 @@
 
                 </div>
                 <div class="btn-group mb-3 " role="group" aria-label="Basic mixed styles example">
-                    <button id="btnSave" type="submit"  class="btn btn-success">Save</button>
+                    <button id="btnSave" type="button"  class="btn btn-success">Save</button>
                     <!-- <button id="btnUpdate" type="button" class="btn btn-warning" (click)="onUpdate()">Update</button> -->
                 </div>
 
@@ -112,6 +112,29 @@
 <script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
 
 <script>
+
+    var baseUrl ="http://localhost:8080/EpicSpringMVC_war/";
+
+            $("#btnSave").click(function (){
+
+            let userData = $("#userForm").serialize();
+
+            $.ajax({
+                url: baseUrl+"user",
+                method: "post",
+                data: userData,
+                dataType:"json",
+            success: function (res) {
+               // alert(res.message);
+
+            },
+            error:function(error){
+                // var jsObject=JSON.parse(error.responseText);
+                // alert(jsObject.message);
+            }
+        });
+
+    });
 
 </script>
 </body>

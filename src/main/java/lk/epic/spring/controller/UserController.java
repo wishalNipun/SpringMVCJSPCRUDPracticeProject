@@ -30,7 +30,7 @@ public class UserController {
         return "userForm";
     }
     @PostMapping
-    public String addUser(User model){
+    public String addUser( User model){
         System.out.println(model.toString());
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd  HH:mm");
