@@ -10,6 +10,6 @@ public class TextController {
 
     @GetMapping
     public String eee(){
-        return "signIn";
+        return "signUp";
     }
 }
