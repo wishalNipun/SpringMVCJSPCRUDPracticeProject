@@ -8,25 +8,31 @@ import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.HibernateTemplate;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 
-@Component
+@Controller
 @RequestMapping("/user")
 @EnableTransactionManagement
 @Transactional
 public class UserController {
 
     @Autowired
-    HibernateTemplate template;
+    private UserRepo repo;
+    @Autowired
+    private ModelMapper mapper;
 
     @GetMapping()
     public String get(){
+        System.out.println("Customer method invoked");
         return "userForm";
     }
     @PostMapping
@@ -37,12 +43,18 @@ public class UserController {
         LocalDateTime currentDateAndTime = LocalDateTime.now();
         String formattedDateAndTime = currentDateAndTime.format(formatter);
         model.setCreateDate(formattedDateAndTime);
-        template.saveOrUpdate(model);
+        repo.save(mapper.map(model, User.class));
 
-
-
-       return "userForm";
+        return "userForm";
     }
+
+        @GetMapping(path = "/data")
+            public @ResponseBody List<User> getAllUser(){
+
+            List<User> all = repo.findAll();
+            return all;
+    }
+    
 //    @PostMapping
 //    public ResponseUtil saveUser(@RequestBody User model){
 //        if (repo.existsById(model.getId())) {

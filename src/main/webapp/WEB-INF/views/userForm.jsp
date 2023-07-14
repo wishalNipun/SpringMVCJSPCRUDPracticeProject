@@ -71,7 +71,7 @@
                         <th></th>
                     </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="tblUser">
 
                     <tr>
                         <td>xxxx</td>
@@ -83,16 +83,7 @@
                         <td style="display: flex;"><button class="btn"><i style="color: #deb624;" class="fa-solid fa-pencil fa-lg"></i></button>
                             <button class="btn" ><i style="color: #e71919;" class="fa-solid fa-trash-can fa-lg" ></i></button></td>
                     </tr>
-                    <tr>
-                        <td>xxxx</td>
-                        <td>xxxx</td>
-                        <td>xxxx</td>
 
-                        <td>xxxx</td>
-                        <td>xxxx</td>
-                        <td style="display: flex;"><button class="btn"><i style="color: #deb624; height: 22px" class="fa-solid fa-pencil fa-lg" ></i></button>
-                            <button class="btn" ><i style="color: #e71919; height: 22px" class="fa-solid fa-trash-can fa-xl" ></i></button></td>
-                    </tr>
                     </tbody>
                 </table>
 
@@ -113,14 +104,14 @@
 
 <script>
 
-    var baseUrl ="http://localhost:8080/EpicSpringMVC_war/";
+
 
             $("#btnSave").click(function (){
 
             let userData = $("#userForm").serialize();
 
             $.ajax({
-                url: baseUrl+"user",
+                url: "user",
                 method: "post",
                 data: userData,
                 dataType:"json",
@@ -136,6 +127,29 @@
 
     });
 
+            $(document).ready(function (){
+                loadAllUsers()
+            })
+
+    function loadAllUsers() {
+        $("#tblUser").empty();
+        $.ajax({
+            url: "user/data",
+            dataType: "json",
+            success: function (resp) {
+
+                for (let user of resp) {
+
+
+
+                    var row = "<tr><td>" + user.id + "</td><td>" +user.name+ '</td><td>' +user.address+ '</td><td>' + user.createDate + '</td><td>' + user.updateDate + '</td><td style="display: flex;"><button class="btn"><i style="color: #deb624; height: 22px" class="fa-solid fa-pencil fa-lg" ></i></button> <button class="btn" ><i style="color: #e71919; height: 22px" class="fa-solid fa-trash-can fa-xl" ></i></button></td></tr>';
+                    $("#tblUser").append(row);
+                }
+
+            }
+        });
+
+    }
 </script>
 </body>
 </html>

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class MainController {
     @GetMapping()
     public String get(){
+        System.out.println("Main method invoked");
         return "index";
     }
 }
