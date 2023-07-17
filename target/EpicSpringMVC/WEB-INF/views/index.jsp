@@ -33,12 +33,12 @@
       padding: 30px;
       background-color: white;">
             <h1 style="color: rgb(0, 0, 0); font-size: 2rem;">Sign In Your Account.</h1>
-            <form style="width: 400px; display: flex;
+            <form  style="width: 400px; display: flex;
         gap: 35px;
         flex-direction: column;">
-                <input  type="text" class="form-control" name="uid" [(ngModel)]="uid" placeholder="User Name" maxlength="15" (input)="validateInput('uName', $event)">
-                <input  type="password" class="form-control" name="upassword" [(ngModel)]="upassword"placeholder="Password" maxlength="15" (input)="validateInput('upassword', $event)">
-                <a href="signIn" style="color: white;" ><button style="width: 100%; " type="button" class="btn btn-primary " >Sign In</button></a>
+                <input id="uid"  type="text" class="form-control" name="uid" placeholder="User Name" maxlength="15">
+                <input id="upassword" type="password" class="form-control" name="upassword" placeholder="Password" maxlength="15">
+                <button id="btnSignIn" style="width: 100%; " type="button" class="btn btn-primary " >Sign In</button>
                 <!-- Button trigger modal -->
                 <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#exampleModal"  >Create Account</button>
             </form>
@@ -58,7 +58,7 @@
                             <div class="mb-3 ">
                                 <label  class="form-label">User Id</label>
                                 <input type="text" class="form-control"  name="id" [(ngModel)]="id" (keyup)="onKeyUp($event)" maxlength="4" (input)="validateInput('userId', $event)" [style.color]="isValidUserId ? 'green' : 'red'" [style.box-shadow]="isValidUserId ? '0 0 0 0.2rem rgba(40, 167, 69, 0.25)' : 'rgb(255 0 7 / 25%) 0px 0px 0px 0.2rem'">
-                                <div [style.display]="userValidLabel ? 'block' : 'none'" style="font-size: 0.7rem; color: #be0b0b;">ID Alreary Exist</div>
+                                <div style="font-size: 0.7rem; color: #be0b0b;">ID AlReady Exist</div>
 
                             </div>
                             <div class="mb-3 ">
@@ -94,12 +94,6 @@
     </div>
 
 </div>
-
-
-
-
-
-
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
 <script src="https://kit.fontawesome.com/bf0feecd9b.js" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -107,6 +101,69 @@
 <script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
 
 <script>
+
+    $('#btnSignIn').click(function () {
+
+
+        var data ={
+            uid:$('#uid').val(),
+            upassword:$('#upassword').val()
+        }
+        console.log(data);
+        $.ajax({
+            url: "user/login",
+            method: "post",
+            contentType:"application/json",
+            data:JSON.stringify(data),
+            dataType:"json",
+            success: function (res) {
+
+                if (res.data){
+
+
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: 'top',
+                        showConfirmButton: false,
+                        timer: 1000,
+                        timerProgressBar: true,
+                        didOpen: (toast) => {
+                            toast.addEventListener('mouseenter', Swal.stopTimer)
+                            toast.addEventListener('mouseleave', Swal.resumeTimer)
+
+                            setTimeout(() => {
+
+                                window.location.href = 'user';
+
+                            }, 1000);
+
+                        }
+                    })
+
+                    Toast.fire({
+                        icon: 'success',
+                        title: 'Signed in successfully'
+                    })
+
+
+                }else {
+                    Swal.fire({
+                        position: 'top',
+                        icon: 'error',
+                        title: 'Invalid User Name Or Password',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                }
+
+
+            },
+            error:function(error){
+                // var jsObject=JSON.parse(error.responseText);
+                // alert(jsObject.message);
+            }
+        });
+    });
 
 </script>
 </body>

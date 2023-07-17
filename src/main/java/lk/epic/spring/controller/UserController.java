@@ -1,5 +1,6 @@
 package lk.epic.spring.controller;
 
+import lk.epic.spring.model.Login;
 import lk.epic.spring.model.User;
 import lk.epic.spring.repo.UserRepo;
 
@@ -19,6 +20,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 
@@ -125,15 +127,24 @@ public class UserController {
 
 
 
-//    @GetMapping(path = "login")
-//    public ResponseUtil checkLogUser(String id,String password) {
-//
-//        boolean userUsingIdAndPassword = service.findUserUsingIdAndPassword(id, password);
-//        return new ResponseUtil("200", "Login Success", userUsingIdAndPassword);
-//
-//
-//
-//    }
+    @PostMapping(path = "login")
+    @ResponseBody
+    public ResponseUtil checkLogUser(@RequestBody Login login) {
+        System.out.println(login);
+
+        if (!repo.existsById(login.getUid())){
+            throw new NoSuchElementException("User  Not Available Error..!");
+        }
+
+        Optional<User> byId = repo.findById(login.getUid());
+        String password1 = byId.get().getPassword();
+        boolean matches = passwordEncoder.matches(login.getUpassword(), password1);
+
+        return new ResponseUtil("200", "Login :", matches);
+
+
+
+    }
 
 
 }
