@@ -38,7 +38,7 @@
         flex-direction: column;">
                 <input  type="text" class="form-control" name="uid" [(ngModel)]="uid" placeholder="User Name" maxlength="15" (input)="validateInput('uName', $event)">
                 <input  type="password" class="form-control" name="upassword" [(ngModel)]="upassword"placeholder="Password" maxlength="15" (input)="validateInput('upassword', $event)">
-                <button style="width: 100%; " type="button" class="btn btn-primary " ><a href="user" style="color: white;" >Sign In</a></button>
+                <a href="signIn" style="color: white;" ><button style="width: 100%; " type="button" class="btn btn-primary " >Sign In</button></a>
                 <!-- Button trigger modal -->
                 <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#exampleModal"  >Create Account</button>
             </form>
@@ -85,8 +85,8 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button id="btnSave" type="button"   class="btn btn-primary" (click)="onSubmit()" [disabled]="disableSaveButton" data-bs-dismiss="modal">Sign Up</button>
-
+                       <a href="signUp"> <button id="btnSave" type="button"   class="btn btn-primary" (click)="onSubmit()" [disabled]="disableSaveButton" data-bs-dismiss="modal">Sign Up</button>
+                       </a>
                     </div>
                 </div>
             </div>

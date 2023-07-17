@@ -2,11 +2,13 @@ package lk.epic.spring.controller;
 
 import lk.epic.spring.model.User;
 import lk.epic.spring.repo.UserRepo;
+
 import lk.epic.spring.util.ResponseUtil;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.HibernateTemplate;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -31,21 +33,25 @@ public class UserController {
     @Autowired
     private ModelMapper mapper;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @GetMapping()
     public String get(){
-        System.out.println("Customer method invoked");
         return "userForm";
     }
 
     @PostMapping
     @ResponseBody
     public ResponseUtil addUser( User model){
-        System.out.println(model.toString());
+        String encode = passwordEncoder.encode(model.getPassword());
+        model.setPassword(encode);
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd  HH:mm");
         LocalDateTime currentDateAndTime = LocalDateTime.now();
         String formattedDateAndTime = currentDateAndTime.format(formatter);
         model.setCreateDate(formattedDateAndTime);
+        model.setUpdateDate("");
         repo.save(mapper.map(model, User.class));
 
 
@@ -73,6 +79,9 @@ public class UserController {
     @PutMapping
     @ResponseBody
     public ResponseUtil updateUser(@RequestBody User model){
+        String encode = passwordEncoder.encode(model.getPassword());
+        model.setPassword(encode);
+
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd  HH:mm");
         Optional<User> byId = repo.findById(model.getId());
         if (!repo.existsById(model.getId())){
@@ -104,6 +113,11 @@ public class UserController {
 
         Optional<User> byId = repo.findById(id);
         User user = mapper.map(byId, User.class);
+
+        if (!repo.existsById(id)){
+            throw new RuntimeException("User "+id+" Not Exist!");
+        }
+
         return new ResponseUtil("200"," Success.!",user);
     }
 

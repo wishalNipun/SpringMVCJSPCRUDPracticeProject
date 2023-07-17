@@ -90,7 +90,7 @@
 
             </div>
         </div>
-        <button  style="right: 0;position: absolute;top: 0; margin: auto; margin: 10px;"  class="btn" type="button"><span class="material-symbols-outlined" style="color: rgb(255, 255, 255);">logout</span></button>
+        <a  href="logout" style="right: 0;position: absolute;top: 0; margin: auto; margin: 10px;"  class="btn" type="button"><span class="material-symbols-outlined" style="color: rgb(255, 255, 255);">logout</span></a>
 
     </section>
 </main>
@@ -124,6 +124,10 @@
                 timer: 1500
             })
             loadAllUsers();
+
+            textFieldClear();
+
+            existUser();
 
         },
         error:function(error){
@@ -225,28 +229,38 @@
 
                 console.log("Enter");
                 let userId = $('#txtId').val();
-                     $.ajax({
-                         url: "user/uSet?id="+userId,
-                         method: "get",
-                         dataType:"json",
-                         success: function (res) {
-                             $("#txtId").val(res.data.id);
-                             $("#txtName").val(res.data.name);
-                             $("#txtAddress").val(res.data.address);
-                         },
-                         error:function(error){
-                             // Swal.fire({
-                             //     position: 'top',
-                             //     icon: 'error',
-                             //     title: 'User Id Not Exist',
-                             //     showConfirmButton: false,
-                             //     timer: 1500
-                             // })
-                             // $("#txtId").val("");
-                             // $("#txtName").val("");
-                             // $("#txtAddress").val("");
-                         }
-                     });
+                     if (userId !=""){
+                         $.ajax({
+                             url: "user/uSet?id="+userId,
+                             method: "get",
+                             dataType:"json",
+                             success: function (res) {
+                                 $("#txtId").val(res.data.id);
+                                 $("#txtName").val(res.data.name);
+                                 $("#txtAddress").val(res.data.address);
+                             },
+                             error:function(error){
+
+                                 Swal.fire({
+                                     position: 'top',
+                                     icon: 'error',
+                                     title: "User Id Not Exist ",
+                                     showConfirmButton: false,
+                                     timer: 1500
+                                 })
+                                 textFieldClear();
+
+                             }
+                         });
+                     }else {
+                         Swal.fire({
+                             position: 'top',
+                             icon: 'error',
+                             title: 'Please Enter Id for Search !',
+                             showConfirmButton: false,
+                             timer: 1500
+                         })
+                     }
 
             }
         });
@@ -314,6 +328,7 @@
                     timer: 1500
                 })
                 loadAllUsers();
+                textFieldClear();
             },
             error:function (error){
                 // let cause= JSON.parse(error.responseText).message;
@@ -323,6 +338,12 @@
         });
     });
 
+    function textFieldClear(){
+        $("#txtId").val("");
+        $("#txtName").val("");
+        $("#txtAddress").val("");
+        $("#txtPassword").val("");
+    }
 
 
 
