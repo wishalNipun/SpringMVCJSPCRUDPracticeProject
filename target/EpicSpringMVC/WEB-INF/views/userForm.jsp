@@ -32,28 +32,28 @@
                 <div class="mb-3 ">
 
                     <label class="form-label">User Id</label>
-                    <input type="text" class="form-control"   name="id"  maxlength="4">
-                    <div style="font-size: 0.7rem; color: #be0b0b;">! Press Enter Button to Search</div>
+                    <input type="text" class="form-control"   name="id" id="txtId" maxlength="4">
+                    <div  style="font-size: 0.7rem; color: #be0b0b;">! Press Enter Button to Search</div>
                 </div>
                 <div class="mb-3 ">
                     <label  class="form-label">User Name</label>
-                    <input type="text" class="form-control" id="name" name="name"  maxlength="20">
+                    <input type="text" class="form-control" id="txtName" name="name"  maxlength="20">
 
                 </div>
                 <div class="mb-3 ">
                     <label class="form-label">User Address</label>
-                    <input type="text"   class="form-control" id="address" name="address"  maxlength="20">
+                    <input type="text"   class="form-control" id="txtAddress" name="address"  maxlength="20">
 
                 </div>
 
                 <div class="mb-3 ">
                     <label  class="form-label">User Password</label>
-                    <input type="password" class="form-control" id="password" name="password"  maxlength="15">
+                    <input type="password" class="form-control" id="txtPassword" name="password"  maxlength="15">
 
                 </div>
-                <div class="btn-group mb-3 " role="group" aria-label="Basic mixed styles example">
+                <div class=" mb-3 " >
                     <button id="btnSave" type="button"  class="btn btn-success">Save</button>
-                    <!-- <button id="btnUpdate" type="button" class="btn btn-warning" (click)="onUpdate()">Update</button> -->
+                    <button id="btnUpdate" type="button" class="btn btn-warning" >Update</button>
                 </div>
 
             </form>
@@ -73,16 +73,16 @@
                     </thead>
                     <tbody id="tblUser">
 
-                    <tr>
-                        <td>xxxx</td>
-                        <td>xxxx</td>
-                        <td>xxxx</td>
+<%--                    <tr>--%>
+<%--                        <td>xxxx</td>--%>
+<%--                        <td>xxxx</td>--%>
+<%--                        <td>xxxx</td>--%>
 
-                        <td>xxxx</td>
-                        <td>xxxx</td>
-                        <td style="display: flex;"><button class="btn"><i style="color: #deb624;" class="fa-solid fa-pencil fa-lg"></i></button>
-                            <button class="btn" ><i style="color: #e71919;" class="fa-solid fa-trash-can fa-lg" ></i></button></td>
-                    </tr>
+<%--                        <td>xxxx</td>--%>
+<%--                        <td>xxxx</td>--%>
+<%--                        <td style="display: flex;"><button class="btn btnUpdate"><i style="color: #deb624;" class="fa-solid fa-pencil fa-lg"></i></button>--%>
+<%--                            <button class="btn btnDelete" ><i style="color: #e71919;" class="fa-solid fa-trash-can fa-lg" ></i></button></td>--%>
+<%--                    </tr>--%>
 
                     </tbody>
                 </table>
@@ -106,30 +106,34 @@
 
 
 
-            $("#btnSave").click(function (){
+    $("#btnSave").click(function (){
 
-            let userData = $("#userForm").serialize();
+        let userData = $("#userForm").serialize();
 
-            $.ajax({
-                url: "user",
-                method: "post",
-                data: userData,
-                dataType:"json",
-            success: function (res) {
-               // alert(res.message);
+        $.ajax({
+            url: "user",
+            method: "post",
+            data: userData,
+            dataType:"json",
+        success: function (res) {
+            Swal.fire({
+                position: 'top',
+                icon: 'success',
+                title: res.message,
+                showConfirmButton: false,
+                timer: 1500
+            })
+            loadAllUsers();
 
-            },
-            error:function(error){
-                // var jsObject=JSON.parse(error.responseText);
-                // alert(jsObject.message);
-            }
+        },
+        error:function(error){
+            // var jsObject=JSON.parse(error.responseText);
+            // alert(jsObject.message);
+        }
         });
 
     });
-
-            $(document).ready(function (){
-                loadAllUsers()
-            })
+    loadAllUsers();
 
     function loadAllUsers() {
         $("#tblUser").empty();
@@ -142,14 +146,217 @@
 
 
 
-                    var row = "<tr><td>" + user.id + "</td><td>" +user.name+ '</td><td>' +user.address+ '</td><td>' + user.createDate + '</td><td>' + user.updateDate + '</td><td style="display: flex;"><button class="btn"><i style="color: #deb624; height: 22px" class="fa-solid fa-pencil fa-lg" ></i></button> <button class="btn" ><i style="color: #e71919; height: 22px" class="fa-solid fa-trash-can fa-xl" ></i></button></td></tr>';
+                    var row = "<tr><td>" + user.id + "</td><td>" +user.name+ '</td><td>' +user.address+ '</td><td>' + user.createDate + '</td><td>' + user.updateDate + '</td><td style="display: flex;"><button class="btn btnUpdateRow" type="button"><i style="color: #deb624; height: 22px" class="fa-solid fa-pencil fa-lg" ></i></button> <button class="btn btnDeleteRow" type="button"><i style="color: #e71919; height: 22px" class="fa-solid fa-trash-can fa-xl" ></i></button></td></tr>';
                     $("#tblUser").append(row);
                 }
+                tableRowClickEventFunction();
 
             }
         });
 
+        existUser();
     }
+
+    function tableRowClickEventFunction() {
+
+        $(".btnUpdateRow").click(function () {
+
+
+            let id = $(this).closest('tr').children(":eq(0)").text();
+            let  name = $(this).closest('tr').children(":eq(1)").text();
+            let address = $(this).closest('tr').children(":eq(2)").text();
+
+
+            $("#txtId").val(id);
+            $("#txtName").val(name);
+            $("#txtAddress").val(address);
+
+
+            existUser();
+
+        });
+
+        $(".btnDeleteRow").click(function () {
+
+            let id = $(this).closest('tr').children(":eq(0)").text();
+
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+
+                    $.ajax({
+                        url: "user?id=" +id,
+                        method: "delete",
+                        dataType:"json",
+                        success: function (resp) {
+                            loadAllUsers();
+
+                            Swal.fire({
+                                position: 'top',
+                                icon: 'success',
+                                title: resp.message,
+                                showConfirmButton: false,
+                                timer: 1500
+                            })
+
+                        },
+                        error:function (error){
+
+                        }
+                    });
+
+                }
+            })
+
+        });
+
+        $("#txtId").on('keyup',function (event){
+
+            existUser();
+            if(event.code == "Enter"){
+
+                console.log("Enter");
+                let userId = $('#txtId').val();
+                     $.ajax({
+                         url: "user/uSet?id="+userId,
+                         method: "get",
+                         dataType:"json",
+                         success: function (res) {
+                             $("#txtId").val(res.data.id);
+                             $("#txtName").val(res.data.name);
+                             $("#txtAddress").val(res.data.address);
+                         },
+                         error:function(error){
+                             // Swal.fire({
+                             //     position: 'top',
+                             //     icon: 'error',
+                             //     title: 'User Id Not Exist',
+                             //     showConfirmButton: false,
+                             //     timer: 1500
+                             // })
+                             // $("#txtId").val("");
+                             // $("#txtName").val("");
+                             // $("#txtAddress").val("");
+                         }
+                     });
+
+            }
+        });
+
+
+
+    }
+
+
+
+    function existUser(){
+        let id =$("#txtId").val();
+        console.log("trigger");
+
+        $.ajax({
+            url: "user?id="+id,
+            method: "get",
+            dataType:"json",
+            success: function (res) {
+                if (res.data){
+                    $('#btnSave').css('display','none');
+                    $('#btnUpdate').css('display','block')
+
+                }else {
+                    $('#btnSave').css('display','block');
+                    $('#btnUpdate').css('display','none');
+                }
+
+
+            },
+            error:function(error){
+                // var jsObject=JSON.parse(error.responseText);
+                // alert(jsObject.message);
+            }
+        });
+    }
+
+    $("#btnUpdate").click(function () {
+
+        let id = $("#txtId").val();
+        let address = $("#txtAddress").val();
+        let name = $("#txtName").val();
+        let password = $("#txtPassword").val();
+
+        let user={
+            id: id,
+            name: name,
+            address: address,
+            password: password,
+
+        }
+
+        $.ajax({
+            url: 'user',
+            method: 'put',
+            contentType:"application/json",
+            data:JSON.stringify(user),
+            dataType:"json",
+            success: function (res) {
+                Swal.fire({
+                    position: 'top',
+                    icon: 'success',
+                    title: res.message,
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+                loadAllUsers();
+            },
+            error:function (error){
+                // let cause= JSON.parse(error.responseText).message;
+                // alert(cause);
+            }
+
+        });
+    });
+
+
+
+
+
+
+
+
+
+
+            //
+            // function setTextFieldAdminValues(id, email, username, password) {
+            //
+            //     $("#txtAdminId").val(id);
+            //     $("#txtAdminEmail").val(email);
+            //     $("#txtAdminUserName").val(username);
+            //     $("#txtAdminPassword").val(password);
+            // }
+            // $("#btnAdminDelete").click(function () {
+            //     let id = $("#txtAdminId").val();
+            //     $.ajax({
+            //         url: baseURL+"admin?id=" + id + "",
+            //         method: "delete",
+            //         dataType:"json",
+            //         success: function (resp) {
+            //             alert(resp.message);
+            //             loadAllAdmins();
+            //         },
+            //         error:function (error){
+            //             alert(JSON.parse(error.responseText).message);
+            //         }
+            //     });
+            // });
+            //
+
 </script>
 </body>
 </html>
