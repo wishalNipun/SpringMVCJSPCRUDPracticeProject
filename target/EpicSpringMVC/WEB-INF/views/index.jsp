@@ -57,24 +57,24 @@
                         <form >
                             <div class="mb-3 ">
                                 <label  class="form-label">User Id</label>
-                                <input type="text" class="form-control"  name="id" [(ngModel)]="id" (keyup)="onKeyUp($event)" maxlength="4" (input)="validateInput('userId', $event)" [style.color]="isValidUserId ? 'green' : 'red'" [style.box-shadow]="isValidUserId ? '0 0 0 0.2rem rgba(40, 167, 69, 0.25)' : 'rgb(255 0 7 / 25%) 0px 0px 0px 0.2rem'">
-                                <div style="font-size: 0.7rem; color: #be0b0b;">ID AlReady Exist</div>
+                                <input type="text" class="form-control"  name="id" id="sid" (keyup)="onKeyUp($event)" maxlength="4" (input)="validateInput('userId', $event)" [style.color]="isValidUserId ? 'green' : 'red'" [style.box-shadow]="isValidUserId ? '0 0 0 0.2rem rgba(40, 167, 69, 0.25)' : 'rgb(255 0 7 / 25%) 0px 0px 0px 0.2rem'">
+                                <div id="lblExist" style="font-size: 0.7rem; color: #be0b0b;">ID AlReady Exist</div>
 
                             </div>
                             <div class="mb-3 ">
                                 <label  class="form-label">User Name</label>
-                                <input type="text" class="form-control"  name="name" [(ngModel)]="name" maxlength="20" (input)="validateInput('userName', $event)" [style.color]="isValidUserName ? 'green' : 'red'" [style.box-shadow]="isValidUserName ? '0 0 0 0.2rem rgba(40, 167, 69, 0.25)' : 'rgb(255 0 7 / 25%) 0px 0px 0px 0.2rem'">
+                                <input type="text" class="form-control"  name="name" id="sname" maxlength="20" (input)="validateInput('userName', $event)" [style.color]="isValidUserName ? 'green' : 'red'" [style.box-shadow]="isValidUserName ? '0 0 0 0.2rem rgba(40, 167, 69, 0.25)' : 'rgb(255 0 7 / 25%) 0px 0px 0px 0.2rem'">
 
                             </div>
                             <div class="mb-3 ">
                                 <label class="form-label">User Address</label>
-                                <input type="text" class="form-control" name="address" [(ngModel)]="address" maxlength="20" (input)="validateInput('userAddress', $event)" [style.color]="isValidUserAddress ? 'green' : 'red'" [style.box-shadow]="isValidUserAddress ? '0 0 0 0.2rem rgba(40, 167, 69, 0.25)' : 'rgb(255 0 7 / 25%) 0px 0px 0px 0.2rem'">
+                                <input type="text" class="form-control" name="address" id="saddress" maxlength="20" (input)="validateInput('userAddress', $event)" [style.color]="isValidUserAddress ? 'green' : 'red'" [style.box-shadow]="isValidUserAddress ? '0 0 0 0.2rem rgba(40, 167, 69, 0.25)' : 'rgb(255 0 7 / 25%) 0px 0px 0px 0.2rem'">
 
                             </div>
 
                             <div class="mb-3 ">
                                 <label  class="form-label">User Password</label>
-                                <input type="password"  class="form-control" name="Password" [(ngModel)]="password" maxlength="15" (input)="validateInput('userPassword', $event)" [style.color]="isValidUserPassword ? 'green' : 'red'" [style.box-shadow]="isValidUserPassword ? '0 0 0 0.2rem rgba(40, 167, 69, 0.25)' : 'rgb(255 0 7 / 25%) 0px 0px 0px 0.2rem'">
+                                <input type="password"  class="form-control" name="Password" id="spassword" maxlength="15" (input)="validateInput('userPassword', $event)" [style.color]="isValidUserPassword ? 'green' : 'red'" [style.box-shadow]="isValidUserPassword ? '0 0 0 0.2rem rgba(40, 167, 69, 0.25)' : 'rgb(255 0 7 / 25%) 0px 0px 0px 0.2rem'">
 
                             </div>
 
@@ -85,8 +85,8 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                       <a href="signUp"> <button id="btnSave" type="button"   class="btn btn-primary" (click)="onSubmit()" [disabled]="disableSaveButton" data-bs-dismiss="modal">Sign Up</button>
-                       </a>
+                        <button id="btnSignUp" type="button"   class="btn btn-primary" (click)="onSubmit()"  data-bs-dismiss="modal">Sign Up</button>
+
                     </div>
                 </div>
             </div>
@@ -174,6 +174,89 @@
             })
         }
     });
+
+    $('#btnSignUp').click(function () {
+
+         let data = {
+            id:$('#sid').val(),
+             name:$('#sname').val(),
+             address:$('#saddress').val(),
+             password:$('#spassword').val()
+         }
+        $.ajax({
+            url: "user",
+            method: "post",
+            data:data,
+            dataType:"json",
+            success: function (res) {
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top',
+                    showConfirmButton: false,
+                    timer: 1000,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                        toast.addEventListener('mouseenter', Swal.stopTimer)
+                        toast.addEventListener('mouseleave', Swal.resumeTimer)
+
+                        setTimeout(() => {
+
+                            window.location.href = 'user';
+
+                        }, 1000);
+
+                    }
+                })
+
+                Toast.fire({
+                    icon: 'success',
+                    title: 'Signed in successfully'
+                })
+
+
+            },
+            error:function(error){
+                // var jsObject=JSON.parse(error.responseText);
+                // alert(jsObject.message);
+            }
+        });
+    });
+
+    $('#lblExist').css('display','none');
+
+    $("#sid").on('keyup',function (event){
+
+        existUserLabel();
+
+    });
+
+
+    function existUserLabel(){
+        let id =$("#sid").val();
+        console.log("trigger");
+
+        $.ajax({
+            url: "user?id="+id,
+            method: "get",
+            dataType:"json",
+            success: function (res) {
+                if (res.data){
+                    $('#lblExist').css('display','block');
+
+
+                }else {
+
+                    $('#lblExist').css('display','none');
+                }
+
+
+            },
+            error:function(error){
+                // var jsObject=JSON.parse(error.responseText);
+                // alert(jsObject.message);
+            }
+        });
+    }
 
 </script>
 </body>

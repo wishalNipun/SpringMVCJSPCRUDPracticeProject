@@ -346,38 +346,6 @@
     }
 
 
-
-
-
-
-
-
-
-            //
-            // function setTextFieldAdminValues(id, email, username, password) {
-            //
-            //     $("#txtAdminId").val(id);
-            //     $("#txtAdminEmail").val(email);
-            //     $("#txtAdminUserName").val(username);
-            //     $("#txtAdminPassword").val(password);
-            // }
-            // $("#btnAdminDelete").click(function () {
-            //     let id = $("#txtAdminId").val();
-            //     $.ajax({
-            //         url: baseURL+"admin?id=" + id + "",
-            //         method: "delete",
-            //         dataType:"json",
-            //         success: function (resp) {
-            //             alert(resp.message);
-            //             loadAllAdmins();
-            //         },
-            //         error:function (error){
-            //             alert(JSON.parse(error.responseText).message);
-            //         }
-            //     });
-            // });
-            //
-
 </script>
 </body>
 </html>
