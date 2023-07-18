@@ -105,64 +105,74 @@
     $('#btnSignIn').click(function () {
 
 
-        var data ={
-            uid:$('#uid').val(),
-            upassword:$('#upassword').val()
-        }
-        console.log(data);
-        $.ajax({
-            url: "user/login",
-            method: "post",
-            contentType:"application/json",
-            data:JSON.stringify(data),
-            dataType:"json",
-            success: function (res) {
-
-                if (res.data){
-
-
-                    const Toast = Swal.mixin({
-                        toast: true,
-                        position: 'top',
-                        showConfirmButton: false,
-                        timer: 1000,
-                        timerProgressBar: true,
-                        didOpen: (toast) => {
-                            toast.addEventListener('mouseenter', Swal.stopTimer)
-                            toast.addEventListener('mouseleave', Swal.resumeTimer)
-
-                            setTimeout(() => {
-
-                                window.location.href = 'user';
-
-                            }, 1000);
-
-                        }
-                    })
-
-                    Toast.fire({
-                        icon: 'success',
-                        title: 'Signed in successfully'
-                    })
-
-
-                }else {
-                    Swal.fire({
-                        position: 'top',
-                        icon: 'error',
-                        title: 'Invalid User Name Or Password',
-                        showConfirmButton: false,
-                        timer: 1500
-                    })
-                }
-
-
-            },
-            error:function(error){
-                // var jsObject=JSON.parse(error.responseText);
-                // alert(jsObject.message);
+        if($('#uid').val() !="" && $('#upassword').val() !="" ){
+            var data ={
+                uid:$('#uid').val(),
+                upassword:$('#upassword').val()
             }
-        });
+            console.log(data);
+            $.ajax({
+                url: "user/login",
+                method: "post",
+                contentType:"application/json",
+                data:JSON.stringify(data),
+                dataType:"json",
+                success: function (res) {
+
+                    if (res.data){
+
+
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: 'top',
+                            showConfirmButton: false,
+                            timer: 1000,
+                            timerProgressBar: true,
+                            didOpen: (toast) => {
+                                toast.addEventListener('mouseenter', Swal.stopTimer)
+                                toast.addEventListener('mouseleave', Swal.resumeTimer)
+
+                                setTimeout(() => {
+
+                                    window.location.href = 'user';
+
+                                }, 1000);
+
+                            }
+                        })
+
+                        Toast.fire({
+                            icon: 'success',
+                            title: 'Signed in successfully'
+                        })
+
+
+                    }else {
+                        Swal.fire({
+                            position: 'top',
+                            icon: 'error',
+                            title: 'Invalid User Name Or Password',
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
+                    }
+
+
+                },
+                error:function(error){
+                    // var jsObject=JSON.parse(error.responseText);
+                    // alert(jsObject.message);
+                }
+            });
+        }else {
+            Swal.fire({
+                position: 'top',
+                icon: 'error',
+                title: 'Try Again',
+                showConfirmButton: false,
+                timer: 1500
+            })
+        }
     });
 
 </script>
