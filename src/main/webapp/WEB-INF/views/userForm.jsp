@@ -108,33 +108,44 @@
 
     $("#btnSave").click(function (){
 
-        let userData = $("#userForm").serialize();
+        if (idPatternValid && namePatternValid && addressPatternValid && passwordPatternValid){
+            let userData = $("#userForm").serialize();
 
-        $.ajax({
-            url: "user",
-            method: "post",
-            data: userData,
-            dataType:"json",
-        success: function (res) {
+            $.ajax({
+                url: "user",
+                method: "post",
+                data: userData,
+                dataType:"json",
+                success: function (res) {
+                    Swal.fire({
+                        position: 'top',
+                        icon: 'success',
+                        title: res.message,
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                    loadAllUsers();
+
+                    textFieldClear();
+
+                    existUser();
+
+                },
+                error:function(error){
+                    // var jsObject=JSON.parse(error.responseText);
+                    // alert(jsObject.message);
+                }
+            });
+        }else {
             Swal.fire({
                 position: 'top',
-                icon: 'success',
-                title: res.message,
+                icon: 'error',
+                title: 'Check Fields and Try Again',
                 showConfirmButton: false,
                 timer: 1500
             })
-            loadAllUsers();
-
-            textFieldClear();
-
-            existUser();
-
-        },
-        error:function(error){
-            // var jsObject=JSON.parse(error.responseText);
-            // alert(jsObject.message);
         }
-        });
+
 
     });
     loadAllUsers();
@@ -159,11 +170,12 @@
         });
 
         existUser();
+
     }
 
     function tableRowClickEventFunction() {
 
-        $(".btnUpdateRow").click(function () {
+            $(".btnUpdateRow").click(function () {
 
 
             let id = $(this).closest('tr').children(":eq(0)").text();
@@ -175,6 +187,9 @@
             $("#txtName").val(name);
             $("#txtAddress").val(address);
 
+            validateInputField("userId", id);
+            validateInputField("userName", name);
+            validateInputField("userAddress", address);
 
             existUser();
 
@@ -300,42 +315,53 @@
 
     $("#btnUpdate").click(function () {
 
-        let id = $("#txtId").val();
-        let address = $("#txtAddress").val();
-        let name = $("#txtName").val();
-        let password = $("#txtPassword").val();
+        if (idPatternValid && namePatternValid && addressPatternValid && passwordPatternValid){
+            let id = $("#txtId").val();
+            let address = $("#txtAddress").val();
+            let name = $("#txtName").val();
+            let password = $("#txtPassword").val();
 
-        let user={
-            id: id,
-            name: name,
-            address: address,
-            password: password,
+            let user={
+                id: id,
+                name: name,
+                address: address,
+                password: password,
 
-        }
-
-        $.ajax({
-            url: 'user',
-            method: 'put',
-            contentType:"application/json",
-            data:JSON.stringify(user),
-            dataType:"json",
-            success: function (res) {
-                Swal.fire({
-                    position: 'top',
-                    icon: 'success',
-                    title: res.message,
-                    showConfirmButton: false,
-                    timer: 1500
-                })
-                loadAllUsers();
-                textFieldClear();
-            },
-            error:function (error){
-                // let cause= JSON.parse(error.responseText).message;
-                // alert(cause);
             }
 
-        });
+            $.ajax({
+                url: 'user',
+                method: 'put',
+                contentType:"application/json",
+                data:JSON.stringify(user),
+                dataType:"json",
+                success: function (res) {
+                    Swal.fire({
+                        position: 'top',
+                        icon: 'success',
+                        title: res.message,
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                    loadAllUsers();
+                    textFieldClear();
+                },
+                error:function (error){
+                    // let cause= JSON.parse(error.responseText).message;
+                    // alert(cause);
+                }
+
+            });
+        }else {
+            Swal.fire({
+                position: 'top',
+                icon: 'error',
+                title: 'Check Fields and Try Again',
+                showConfirmButton: false,
+                timer: 1500
+            })
+        }
+
     });
 
     function textFieldClear(){
@@ -343,12 +369,20 @@
         $("#txtName").val("");
         $("#txtAddress").val("");
         $("#txtPassword").val("");
+
+        $('#txtId').css('box-shadow','0px 0px 0px #000');
+        $('#txtName').css('box-shadow','0px 0px 0px #000');
+        $('#txtAddress').css('box-shadow','0px 0px 0px #000');
+        $('#txtPassword').css('box-shadow','0px 0px 0px #000');
     }
 
     let idPatternValid =false;
     let namePatternValid =false;
     let addressPatternValid =false;
     let passwordPatternValid =false;
+
+
+
 
     $("#txtName").on('keyup',function (event){
         validateInputField("userName", $("#txtName").val());
