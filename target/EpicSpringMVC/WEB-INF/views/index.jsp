@@ -57,26 +57,24 @@
                         <form >
                             <div class="mb-3 ">
                                 <label  class="form-label">User Id</label>
-                                <input type="text" class="form-control"  name="id" id="sid" (keyup)="onKeyUp($event)" maxlength="4" (input)="validateInput('userId', $event)" [style.color]="isValidUserId ? 'green' : 'red'" [style.box-shadow]="isValidUserId ? '0 0 0 0.2rem rgba(40, 167, 69, 0.25)' : 'rgb(255 0 7 / 25%) 0px 0px 0px 0.2rem'">
+                                <input type="text" class="form-control"  name="id" id="sid"  maxlength="4" >
                                 <div id="lblExist" style="font-size: 0.7rem; color: #be0b0b;">ID AlReady Exist</div>
 
                             </div>
                             <div class="mb-3 ">
                                 <label  class="form-label">User Name</label>
-                                <input type="text" class="form-control"  name="name" id="sname" maxlength="20" (input)="validateInput('userName', $event)" [style.color]="isValidUserName ? 'green' : 'red'" [style.box-shadow]="isValidUserName ? '0 0 0 0.2rem rgba(40, 167, 69, 0.25)' : 'rgb(255 0 7 / 25%) 0px 0px 0px 0.2rem'">
+                                <input type="text" class="form-control"  name="name" id="sname" maxlength="20" >
 
                             </div>
                             <div class="mb-3 ">
                                 <label class="form-label">User Address</label>
-                                <input type="text" class="form-control" name="address" id="saddress" maxlength="20" (input)="validateInput('userAddress', $event)" [style.color]="isValidUserAddress ? 'green' : 'red'" [style.box-shadow]="isValidUserAddress ? '0 0 0 0.2rem rgba(40, 167, 69, 0.25)' : 'rgb(255 0 7 / 25%) 0px 0px 0px 0.2rem'">
+                                <input type="text" class="form-control" name="address" id="saddress" maxlength="20" >
 
                             </div>
 
                             <div class="mb-3 ">
                                 <label  class="form-label">User Password</label>
-                                <input type="password"  class="form-control" name="Password" id="spassword" maxlength="15" (input)="validateInput('userPassword', $event)" [style.color]="isValidUserPassword ? 'green' : 'red'" [style.box-shadow]="isValidUserPassword ? '0 0 0 0.2rem rgba(40, 167, 69, 0.25)' : 'rgb(255 0 7 / 25%) 0px 0px 0px 0.2rem'">
-
-                            </div>
+                                <input type="password"  class="form-control" name="Password" id="spassword" maxlength="15" >                     </div>
 
                         </form>
 

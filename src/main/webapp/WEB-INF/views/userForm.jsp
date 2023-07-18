@@ -223,7 +223,7 @@
         });
 
         $("#txtId").on('keyup',function (event){
-
+            validateInputField("userId", $("#txtId").val());
             existUser();
             if(event.code == "Enter"){
 
@@ -344,6 +344,86 @@
         $("#txtAddress").val("");
         $("#txtPassword").val("");
     }
+
+    let idPatternValid =false;
+    let namePatternValid =false;
+    let addressPatternValid =false;
+    let passwordPatternValid =false;
+
+    $("#txtName").on('keyup',function (event){
+        validateInputField("userName", $("#txtName").val());
+        }
+    );
+    $("#txtAddress").on('keyup',function (event){
+            validateInputField("userAddress", $("#txtAddress").val());
+        }
+    );
+    $("#txtPassword").on('keyup',function (event){
+            validateInputField("userPassword", $("#txtPassword").val());
+        }
+    );
+    function validateInputField(inputType, inputField) {
+        let pattern;
+
+
+        switch (inputType) {
+            case 'userId':
+                pattern = /^(C)[0-9]{3}$/;
+                idPatternValid= pattern.test(inputField);
+
+                if (idPatternValid){
+                    $('#txtId').css('box-shadow','0 0 0 0.2rem rgba(40, 167, 69, 0.25)')
+                    $('#txtId').css('color','green')
+                }else {
+                    $('#txtId').css('box-shadow','rgb(255 0 7 / 25%) 0px 0px 0px 0.2rem')
+                    $('#txtId').css('color','red')
+                }
+                break;
+
+            case 'userName':
+                pattern = /^[A-z]{3,20}$/;
+                namePatternValid= pattern.test(inputField);
+                if (namePatternValid){
+                    $('#txtName').css('box-shadow','0 0 0 0.2rem rgba(40, 167, 69, 0.25)')
+                    $('#txtName').css('color','green')
+                }else {
+                    $('#txtName').css('box-shadow','rgb(255 0 7 / 25%) 0px 0px 0px 0.2rem')
+                    $('#txtName').css('color','red')
+                }
+                break;
+
+            case 'userAddress':
+                pattern = /^[A-z0-9 /,]{4,20}$/;
+                addressPatternValid= pattern.test(inputField);
+                if (addressPatternValid){
+                    $('#txtAddress').css('box-shadow','0 0 0 0.2rem rgba(40, 167, 69, 0.25)')
+                    $('#txtAddress').css('color','green')
+                }else {
+                    $('#txtAddress').css('box-shadow','rgb(255 0 7 / 25%) 0px 0px 0px 0.2rem')
+                    $('#txtAddress').css('color','red')
+                }
+                break;
+
+            case 'userPassword':
+                pattern = /^[A-z0-9#@$^&*!/,]{8,15}$/;
+                passwordPatternValid= pattern.test(inputField);
+                if (passwordPatternValid){
+                    $('#txtPassword').css('box-shadow','0 0 0 0.2rem rgba(40, 167, 69, 0.25)')
+                    $('#txtPassword').css('color','green')
+                }else {
+                    $('#txtPassword').css('box-shadow','rgb(255 0 7 / 25%) 0px 0px 0px 0.2rem')
+                    $('#txtPassword').css('color','red')
+                }
+                break;
+
+            default:
+
+        }
+
+
+    }
+
+
 
 
 </script>
