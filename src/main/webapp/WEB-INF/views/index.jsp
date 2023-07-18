@@ -256,6 +256,73 @@
         });
     }
 
+
+    let sidPatternValid =false;
+    let snamePatternValid =false;
+    let saddressPatternValid =false;
+    let spasswordPatternValid =false;
+    function validateSignUpInputField(inputType, inputField) {
+        let pattern;
+
+
+        switch (inputType) {
+            case 'userId':
+                pattern = /^(C)[0-9]{3}$/;
+                sidPatternValid= pattern.test(inputField);
+
+                if (sidPatternValid){
+                    $('#sid').css('box-shadow','0 0 0 0.2rem rgba(40, 167, 69, 0.25)')
+                    $('#sid').css('color','green')
+                }else {
+                    $('#sid').css('box-shadow','rgb(255 0 7 / 25%) 0px 0px 0px 0.2rem')
+                    $('#sid').css('color','red')
+                }
+                break;
+
+            case 'userName':
+                pattern = /^[A-z]{3,20}$/;
+                snamePatternValid= pattern.test(inputField);
+                if (snamePatternValid){
+                    $('#sname').css('box-shadow','0 0 0 0.2rem rgba(40, 167, 69, 0.25)')
+                    $('#sname').css('color','green')
+                }else {
+                    $('#sname').css('box-shadow','rgb(255 0 7 / 25%) 0px 0px 0px 0.2rem')
+                    $('#sname').css('color','red')
+                }
+                break;
+
+            case 'userAddress':
+                pattern = /^[A-z0-9 /,]{4,20}$/;
+                saddressPatternValid= pattern.test(inputField);
+                if (saddressPatternValid){
+                    $('#saddress').css('box-shadow','0 0 0 0.2rem rgba(40, 167, 69, 0.25)')
+                    $('#saddress').css('color','green')
+                }else {
+                    $('#saddress').css('box-shadow','rgb(255 0 7 / 25%) 0px 0px 0px 0.2rem')
+                    $('#saddress').css('color','red')
+                }
+                break;
+
+            case 'userPassword':
+                pattern = /^[A-z0-9#@$^&*!/,]{8,15}$/;
+                spasswordPatternValid= pattern.test(inputField);
+                if (spasswordPatternValid){
+                    $('#spassword').css('box-shadow','0 0 0 0.2rem rgba(40, 167, 69, 0.25)')
+                    $('#txtPassword').css('color','green')
+                }else {
+                    $('#spassword').css('box-shadow','rgb(255 0 7 / 25%) 0px 0px 0px 0.2rem')
+                    $('#spassword').css('color','red')
+                }
+                break;
+
+            default:
+
+        }
+
+
+    }
+
+
 </script>
 </body>
 </html>
