@@ -86,9 +86,16 @@
 
                     </tbody>
                 </table>
-
+                <nav id="paginationNav" aria-label="Table Pagination">
+                    <ul class="pagination justify-content-center">
+                        <!-- Pagination links dynamically added through JavaScript -->
+                    </ul>
+                </nav>
 
             </div>
+
+
+
         </div>
         <a  href="logout" style="right: 0;position: absolute;top: 0; margin: auto; margin: 10px;"  class="btn" type="button"><span class="material-symbols-outlined" style="color: rgb(255, 255, 255);">logout</span></a>
 
@@ -140,7 +147,7 @@
             Swal.fire({
                 position: 'top',
                 icon: 'error',
-                title: 'Checked and Try Again',
+                title: 'Check Fields and Try Again',
                 showConfirmButton: false,
                 timer: 1500
             })
@@ -356,7 +363,7 @@
             Swal.fire({
                 position: 'top',
                 icon: 'error',
-                title: 'Checked and Try Again',
+                title: 'Check Fields and Try Again',
                 showConfirmButton: false,
                 timer: 1500
             })
@@ -456,6 +463,47 @@
 
 
     }
+
+////////////////////////////////////////////////////////////////////////////////////
+
+
+    $(document).ready(function() {
+        // Define the number of items per page
+        var itemsPerPage = 5;
+
+        // Get the total number of items
+        var totalItems = $('#tblUser > tr').length;
+
+        // Calculate the number of pages
+        var totalPages = Math.ceil(totalItems / itemsPerPage);
+
+        // Generate the pagination links
+        var paginationHTML = '';
+        for (var i = 1; i <= totalPages; i++) {
+            paginationHTML += '<li class="page-item"><a class="page-link" href="#">' + i + '</a></li>';
+        }
+        $('#paginationNav ul').html(paginationHTML);
+
+        // Show the first page
+        showPage(1);
+
+        // Handle click events on pagination links
+        $('#paginationNav').on('click', '.page-link', function(e) {
+            e.preventDefault();
+            var page = parseInt($(this).text());
+            showPage(page);
+        });
+
+        // Function to show a specific page
+        function showPage(page) {
+            var startIndex = (page - 1) * itemsPerPage;
+            var endIndex = startIndex + itemsPerPage;
+
+            $('#tblUser > tr').hide(); // Hide all rows
+            $('#tblUser > tr').slice(startIndex, endIndex).show(); // Show only the selected page's rows
+        }
+    });
+
 
 
 

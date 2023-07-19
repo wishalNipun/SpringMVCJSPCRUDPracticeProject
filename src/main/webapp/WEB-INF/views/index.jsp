@@ -83,7 +83,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button id="btnSignUp" type="button"   class="btn btn-primary" (click)="onSubmit()"  data-bs-dismiss="modal">Sign Up</button>
+                        <button id="btnSignUp" type="button"   class="btn btn-primary" >Sign Up</button>
 
                     </div>
                 </div>
@@ -141,7 +141,7 @@
 
                         Toast.fire({
                             icon: 'success',
-                            title: 'Signed in successfully'
+                            title: 'Signed In successfully'
                         })
 
 
@@ -175,49 +175,74 @@
 
     $('#btnSignUp').click(function () {
 
-         let data = {
-            id:$('#sid').val(),
-             name:$('#sname').val(),
-             address:$('#saddress').val(),
-             password:$('#spassword').val()
-         }
-        $.ajax({
-            url: "user",
-            method: "post",
-            data:data,
-            dataType:"json",
-            success: function (res) {
-                const Toast = Swal.mixin({
-                    toast: true,
-                    position: 'top',
-                    showConfirmButton: false,
-                    timer: 1000,
-                    timerProgressBar: true,
-                    didOpen: (toast) => {
-                        toast.addEventListener('mouseenter', Swal.stopTimer)
-                        toast.addEventListener('mouseleave', Swal.resumeTimer)
+        if (sidPatternValid && snamePatternValid && saddressPatternValid && spasswordPatternValid){
+           if (!existUser){
+               $('.modal').modal('hide');
+               let data = {
+                   id:$('#sid').val(),
+                   name:$('#sname').val(),
+                   address:$('#saddress').val(),
+                   password:$('#spassword').val()
+               }
+               $.ajax({
+                   url: "user",
+                   method: "post",
+                   data:data,
+                   dataType:"json",
+                   success: function (res) {
+                       const Toast = Swal.mixin({
+                           toast: true,
+                           position: 'top',
+                           showConfirmButton: false,
+                           timer: 1000,
+                           timerProgressBar: true,
+                           didOpen: (toast) => {
+                               toast.addEventListener('mouseenter', Swal.stopTimer)
+                               toast.addEventListener('mouseleave', Swal.resumeTimer)
 
-                        setTimeout(() => {
+                               setTimeout(() => {
 
-                            window.location.href = 'user';
+                                   window.location.href = 'user';
 
-                        }, 1000);
+                               }, 1000);
 
-                    }
-                })
+                           }
+                       })
 
-                Toast.fire({
-                    icon: 'success',
-                    title: 'Signed in successfully'
-                })
+                       Toast.fire({
+                           icon: 'success',
+                           title: 'Signed Up successfully'
+                       })
 
 
-            },
-            error:function(error){
-                // var jsObject=JSON.parse(error.responseText);
-                // alert(jsObject.message);
-            }
-        });
+                   },
+                   error:function(error){
+                       // var jsObject=JSON.parse(error.responseText);
+                       // alert(jsObject.message);
+                   }
+               });
+           }else {
+               Swal.fire({
+                   position: 'top',
+                   icon: 'error',
+                   title: 'Exist User Please Use Another UserName',
+                   showConfirmButton: false,
+                   timer: 1500
+               })
+           }
+
+
+        }else {
+            Swal.fire({
+                position: 'top',
+                icon: 'error',
+                title: 'Check Fields and Try Again',
+                showConfirmButton: false,
+                timer: 1500
+            })
+        }
+
+
     });
 
     $('#lblExist').css('display','none');
@@ -225,10 +250,10 @@
     $("#sid").on('keyup',function (event){
 
         existUserLabel();
-
+        validateSignUpInputField("userId",$('#sid').val());
     });
 
-
+    let existUser =false;
     function existUserLabel(){
         let id =$("#sid").val();
         console.log("trigger");
@@ -240,11 +265,13 @@
             success: function (res) {
                 if (res.data){
                     $('#lblExist').css('display','block');
+                    existUser =true;
 
 
                 }else {
 
                     $('#lblExist').css('display','none');
+                    existUser =false;
                 }
 
 
@@ -261,6 +288,19 @@
     let snamePatternValid =false;
     let saddressPatternValid =false;
     let spasswordPatternValid =false;
+
+    $("#sname").on('keyup',function (event){
+        validateSignUpInputField("userName", $("#sname").val());
+        }
+    );
+    $("#saddress").on('keyup',function (event){
+        validateSignUpInputField("userAddress", $("#saddress").val());
+        }
+    );
+    $("#spassword").on('keyup',function (event){
+        validateSignUpInputField("userPassword", $("#spassword").val());
+        }
+    );
     function validateSignUpInputField(inputType, inputField) {
         let pattern;
 
@@ -308,7 +348,7 @@
                 spasswordPatternValid= pattern.test(inputField);
                 if (spasswordPatternValid){
                     $('#spassword').css('box-shadow','0 0 0 0.2rem rgba(40, 167, 69, 0.25)')
-                    $('#txtPassword').css('color','green')
+                    $('#spassword').css('color','green')
                 }else {
                     $('#spassword').css('box-shadow','rgb(255 0 7 / 25%) 0px 0px 0px 0.2rem')
                     $('#spassword').css('color','red')
