@@ -206,7 +206,7 @@
                     render: function() {
 
                         return '<button class="btn btnUpdateRow" type="button"><i style="color: #deb624; height: 22px" class="fa-solid fa-pencil fa-lg"></i></button>' +
-                            '<button class="btn btnDeleteRow" type="button"><i style="color: #e71919; height: 22px" class="fa-solid fa-trash-can fa-xl"></i></button>';
+                            '<button class="btn btnDeleteRow" type="button"><i style="color: #e71919; height: 22px" class="fa-solid fa-trash-can fa-lg"></i></button>';
                     }
 
                 }
