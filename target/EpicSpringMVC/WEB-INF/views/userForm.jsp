@@ -419,7 +419,7 @@
         $("#txtName").val("");
         $("#txtAddress").val("");
         $("#txtPassword").val("");
-
+        existUser();
         $('#txtId').css('box-shadow','0px 0px 0px #000');
         $('#txtName').css('box-shadow','0px 0px 0px #000');
         $('#txtAddress').css('box-shadow','0px 0px 0px #000');
