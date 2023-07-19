@@ -17,6 +17,8 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
 
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
 </head>
 <body>
 <main id="userFormMain">
@@ -58,7 +60,7 @@
 
             </form>
             <div class="col-8 m-4  ">
-                <table class="table table-hover table-bordered" style="margin: 0;">
+                <table id="myTable" class="table table-hover table-bordered" style="margin: 0;">
                     <thead class=" table-success">
 
                     <tr>
@@ -105,6 +107,8 @@
 
 <script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
 
+<script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.5/js/dataTables.bootstrap5.min.js"></script>
 <script>
 
 
@@ -153,28 +157,71 @@
     });
     loadAllUsers();
 
+    // function loadAllUsers() {
+    //     $("#tblUser").empty();
+    //     $.ajax({
+    //         url: "user/data",
+    //         dataType: "json",
+    //         success: function (resp) {
+    //
+    //             for (let user of resp) {
+    //
+    //
+    //
+    //                 var row = "<tr><td>" + user.id + "</td><td>" +user.name+ '</td><td>' +user.address+ '</td><td>' + user.createDate + '</td><td>' + user.updateDate + '</td><td style="display: flex;"><button class="btn btnUpdateRow" type="button"><i style="color: #deb624; height: 22px" class="fa-solid fa-pencil fa-lg" ></i></button> <button class="btn btnDeleteRow" type="button"><i style="color: #e71919; height: 22px" class="fa-solid fa-trash-can fa-xl" ></i></button></td></tr>';
+    //                 $("#tblUser").append(row);
+    //             }
+    //             tableRowClickEventFunction();
+    //
+    //         }
+    //     });
+    //
+    //     existUser();
+    //
+    // }
+
+    //
+    var table;
     function loadAllUsers() {
-        $("#tblUser").empty();
-        $.ajax({
-            url: "user/data",
-            dataType: "json",
-            success: function (resp) {
+        if (table) {
+            // If the table is already initialized, destroy the DataTable instance
+            table.destroy();
+        }
 
-                for (let user of resp) {
+        table = $('#myTable').DataTable({
+            lengthMenu: [ 8, 16, 24, 32,40,48, 100 ],
+            ajax: {
+                url: 'user/data',
+                dataType: 'json',
+                dataSrc: ''
+            },
+            columns: [
+                { data: 'id' },
+                { data: 'name' },
+                { data: 'address' },
+                { data: 'createDate' },
+                { data: 'updateDate' },
+                {
+                    data: null,
+                    render: function() {
 
+                        return '<button class="btn btnUpdateRow" type="button"><i style="color: #deb624; height: 22px" class="fa-solid fa-pencil fa-lg"></i></button>' +
+                            '<button class="btn btnDeleteRow" type="button"><i style="color: #e71919; height: 22px" class="fa-solid fa-trash-can fa-xl"></i></button>';
+                    }
 
-
-                    var row = "<tr><td>" + user.id + "</td><td>" +user.name+ '</td><td>' +user.address+ '</td><td>' + user.createDate + '</td><td>' + user.updateDate + '</td><td style="display: flex;"><button class="btn btnUpdateRow" type="button"><i style="color: #deb624; height: 22px" class="fa-solid fa-pencil fa-lg" ></i></button> <button class="btn btnDeleteRow" type="button"><i style="color: #e71919; height: 22px" class="fa-solid fa-trash-can fa-xl" ></i></button></td></tr>';
-                    $("#tblUser").append(row);
                 }
+            ],
+            drawCallback: function () {
                 tableRowClickEventFunction();
-
             }
+
         });
+
 
         existUser();
 
     }
+
 
     function tableRowClickEventFunction() {
 
@@ -346,7 +393,7 @@
                         showConfirmButton: false,
                         timer: 1500
                     })
-                    loadAllUsers();
+                   loadAllUsers();
                     textFieldClear();
                 },
                 error:function (error){
